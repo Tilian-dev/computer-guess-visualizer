@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Number Guessing Visualizer</title>
+    <link rel="stylesheet" href="numberGuess.css">
+</head>
+
+<body>
+    <div class="text">
+        <h1>Visual Number Guesser</h1>
+        <p>This is a Number Search Method Test. Use the button for the Search Method you would like.</p>
+        <div>
+            <input type="number" class="valueBox" id="userNumber" placeholder="Put your number here">
+            <button class="startButton" id="randomButton">Complete Random</button>
+            <button class="startButton" id="incramentalButton">Incremental</button>
+            <!--<button class="startButton" id="undecidedButton">?</button>-->
+        </div>
+        <hr>
+    </div>
+    <div class="numberBox" id="box"></div>
+
+
+    <script text="type/javascript">
+        var gotIt = false;
+        var high = 100;
+        var low = 1;
+        var boxNumber = 1
+        var i = 1
+        createPage();
+        
+        function createPage() {
+            for (let i = 1; i < 101; i++) {
+                document.getElementById('box').innerHTML += '<p class="number" id="' + boxNumber + '">' +  boxNumber + '</p>';
+                boxNumber++
+            }
+        }
+
+        document.getElementById('randomButton').onclick = function () {
+            randomLoop();
+        }
+
+        function randomLoop() { //Randomly scans board for a user input number in order to guess users input and visualize it
+            var myNumber = document.getElementById("userNumber").value; // User input number
+            var guess = Math.random(); // random number generator, includes decimals
+            guess = guess * 101; // sets range of 1-100
+            guess = Math.floor(guess); // makes random number whole
+            if (gotIt == false) { // checks if number has been guessed correctly
+                setTimeout(function () { //adds a delay to function
+                    if (guess == myNumber) { // correct number
+                        try { //retrys these actions until it works incase of error
+                            document.getElementById(guess).innerHTML = '=';
+                            document.getElementById(guess).style.backgroundColor = "green";
+                        } finally { // once retry is successful it proceeds
+                            gotIt = true;
+                        }
+                    } else { //wrong number
+                        try {
+                            document.getElementById(guess).innerHTML = 'x';
+                            document.getElementById(guess).style.backgroundColor = "red";
+                        } finally {
+                            randomLoop(); //Self invokes until succesful
+                        }
+                    }
+                }, 75); //Delay of function in ms
+            }
+        }
+
+        document.getElementById('incramentalButton').onclick = function () {
+            incramentalLoop();
+        }
+
+        function incramentalLoop() {
+            var myNumber = document.getElementById("userNumber").value;
+            if (myNumber <= 50) {
+                lessThan50();
+            } else if (myNumber >= 51) {
+                greaterThan50();
+            }
+        }
+
+        function lessThan50() {
+            var myNumber = document.getElementById("userNumber").value;
+            setTimeout(function () {
+                if (myNumber == low) {
+                    document.getElementById(low).innerHTML = "=";
+                    document.getElementById(low).style.backgroundColor = "green";
+                } else {
+                    document.getElementById(low).innerHTML = "x";
+                    document.getElementById(low).style.backgroundColor = "red";
+                    low++;
+                    lessThan50();
+                }
+            }, 75)
+        }
+
+        function greaterThan50() {
+            var myNumber = document.getElementById("userNumber").value;
+            setTimeout(function() {
+                if (myNumber == high) {
+                    document.getElementById(high).innerHTML = "=";
+                    document.getElementById(high).style.backgroundColor = "green";
+                } else {
+                    document.getElementById(high).innerHTML = "x";
+                    document.getElementById(high).style.backgroundColor = "red";
+                    high--;
+                    greaterThan50();
+                }
+            }, 75)
+        }
+    </script>
+</body>
+
+<footer>
+
+</footer>
+
+</html>
